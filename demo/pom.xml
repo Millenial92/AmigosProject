@@ -48,7 +48,7 @@
                           https://repo1.maven.org/maven2/com/github/eirslett/frontend-maven-plugin/ -->
 				<version>1.11.2</version>
 				<configuration>
-					<nodeVersion>v3.8.8</nodeVersion>
+					<nodeVersion>v4.6.0</nodeVersion>
 					<workingDirectory>src/frontend</workingDirectory>
 				</configuration>
 				<executions>
@@ -83,6 +83,27 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-build-folder</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<resource>
+									<directory>src/frontend/build</directory>
+								</resource>
+
+							</resources>
+							<outputDirectory>${basedir}/target/classes/static</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
@@ -94,6 +115,35 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.3.2</version>
+				<configuration>
+					<from>
+						<image>openjdk:20</image>
+						<auth>
+							<username>millenial92</username>
+							<password>dckr_pat_rh0kEy6I-WTgEhXPjbuiMXga7lI</password>
+						</auth>
+					</from>
+					<to>
+						<image>millenial92/spring/project/fullstack1</image>
+						<auth>
+							<username>millenial92</username>
+							<password>dckr_pat_rh0kEy6I-WTgEhXPjbuiMXga7lI</password>
+						</auth>
+					</to>
+					<container>
+						<ports>
+							<port>8082</port>
+						</ports>
+						<format>OCI</format>
+					</container>
+				</configuration>
+
+			</plugin>
+
 		</plugins>
 	</build>
 <profiles>
