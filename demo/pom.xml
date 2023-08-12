@@ -14,7 +14,9 @@
 	<name>demo</name>
 	<description>Demo project for Spring Boot_Amigos</description>
 	<properties>
-		<java.version>20</java.version>
+		<java.version>19</java.version>
+		<app.image.name>springboot-react-fullstack</app.image.name>
+		<app.image.tag/>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -44,6 +46,7 @@
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
+
 				<!-- Use the latest released version:
                           https://repo1.maven.org/maven2/com/github/eirslett/frontend-maven-plugin/ -->
 				<version>1.11.2</version>
@@ -82,6 +85,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
@@ -115,20 +119,31 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+		</plugins>
+	</build>
+<profiles>
+	<profile>
+		<id>jib-push-to-dockerhub</id>
+		<activation>
+			<activeByDefault>false</activeByDefault>
+		</activation>
+		<build>
+			<plugins>
 			<plugin>
 				<groupId>com.google.cloud.tools</groupId>
 				<artifactId>jib-maven-plugin</artifactId>
 				<version>3.3.2</version>
 				<configuration>
 					<from>
-						<image>openjdk:20</image>
+						<image>openjdk:19</image>
 						<auth>
 							<username>millenial92</username>
 							<password>dckr_pat_rh0kEy6I-WTgEhXPjbuiMXga7lI</password>
 						</auth>
 					</from>
 					<to>
-						<image>millenial92/spring/project/fullstack1</image>
+						<image>docker.io/millenial92/${app.image.name}:${app.image.tag}</image>
 						<auth>
 							<username>millenial92</username>
 							<password>dckr_pat_rh0kEy6I-WTgEhXPjbuiMXga7lI</password>
@@ -141,12 +156,116 @@
 						<format>OCI</format>
 					</container>
 				</configuration>
-
+				<executions>
+					<execution>
+						<id>push-custom-tag</id>
+						<phase>package</phase>
+						<configuration>
+							<to>
+								<image>docker.io/millenial92/${app.image.name}:${app.image.tag}</image>
+								<auth>
+									<username>millenial92</username>
+									<password>dckr_pat_rh0kEy6I-WTgEhXPjbuiMXga7lI</password>
+								</auth>
+							</to>
+						</configuration>
+						<goals>
+							<goal>build</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>push-latest-tag</id>
+						<phase>package</phase>
+						<configuration>
+							<to>
+								<image>docker.io/millenial92/${app.image.name}:latest</image>
+								<auth>
+									<username>millenial92</username>
+									<password>dckr_pat_rh0kEy6I-WTgEhXPjbuiMXga7lI</password>
+								</auth>
+							</to>
+						</configuration>
+						<goals>
+							<goal>build</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
+			</plugins>
+		</build>
+	</profile>
 
-		</plugins>
-	</build>
-<profiles>
+	<profile>
+		<id>jib-push-to-local</id>
+		<activation>
+			<activeByDefault>false</activeByDefault>
+		</activation>
+		<build>
+			<plugins>
+				<plugin>
+					<groupId>com.google.cloud.tools</groupId>
+					<artifactId>jib-maven-plugin</artifactId>
+					<version>3.3.2</version>
+					<configuration>
+						<from>
+							<image>openjdk:19</image>
+							<auth>
+								<username>millenial92</username>
+								<password>dckr_pat_rh0kEy6I-WTgEhXPjbuiMXga7lI</password>
+							</auth>
+						</from>
+						<to>
+							<image>millenial92/${app.image.name}:${app.image.tag}</image>
+							<auth>
+								<username>millenial92</username>
+								<password>dckr_pat_rh0kEy6I-WTgEhXPjbuiMXga7lI</password>
+							</auth>
+						</to>
+						<container>
+							<ports>
+								<port>8082</port>
+							</ports>
+							<format>OCI</format>
+						</container>
+					</configuration>
+					<executions>
+						<execution>
+							<id>push-custom-tag</id>
+							<phase>package</phase>
+							<configuration>
+								<to>
+									<image>millenial92/${app.image.name}:${app.image.tag}</image>
+									<auth>
+										<username>millenial92</username>
+										<password>dckr_pat_rh0kEy6I-WTgEhXPjbuiMXga7lI</password>
+									</auth>
+								</to>
+							</configuration>
+							<goals>
+								<goal>dockerBuild</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>push-latest-tag</id>
+							<phase>package</phase>
+							<configuration>
+								<to>
+									<image>docker.io/millenial92/${app.image.name}:latest</image>
+									<auth>
+										<username>millenial92</username>
+										<password>dckr_pat_rh0kEy6I-WTgEhXPjbuiMXga7lI</password>
+									</auth>
+								</to>
+							</configuration>
+							<goals>
+								<goal>dockerBuild</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</build>
+	</profile>
 	<profile>
 		<id>build-frontend</id>
 		<activation>
