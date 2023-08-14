@@ -1,64 +1,5 @@
-//import { useState, useEffect } from 'react';
-//import './App.css';
-//import React from 'react';
-//import { getAllStudents } from "./client";
-//import { Breadcrumb, Layout, Menu, theme } from 'antd';
-//import {
-//  DesktopOutlined,
-//  FileOutlined,
-//  PieChartOutlined,
-//  TeamOutlined,
-//  UserOutlined,
-//} from '@ant-design/icons';
-//const { Header, Content, Footer, Sider } = Layout;
-//const { Submenu } = Menu;
-//
-//
-//
-//function App() {
-//const [ students, setStudents ] = useState([]);
-//const [ collapsed, setCollapsed ] = useState(false);
-//
-//const fetchStudents = () =>
-//getAllStudents()
-//.then(res => res.json())
-//.then(data => {console.log(data);
-// setStudents(data);
-// })
-//
-//useEffect ( () => {
-//console.log("Component is mounted");
-//fetchStudents();
-//}, []);
-//
-//  if (students.length <= 0)
-//  {
-//  return "NO DATA";
-//  }
-//  return (
-//      <Layout style={{ minHeight: '100vh' }}>
-//        <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
-//          <div className="demo-logo-vertical" />
-//          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={'Items'} />
-//        </Sider>
-//        <Layout>
-//          <Header style={{ padding: 0, background: colorBgContainer }} />
-//          <Content style={{ margin: '0 16px' }}>
-//            <Breadcrumb style={{ margin: '16px 0' }}>
-//              <Breadcrumb.Item>User</Breadcrumb.Item>
-//              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-//            </Breadcrumb>
-//            <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>
-//              Bill is a cat.
-//            </div>
-//          </Content>
-//          <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
-//        </Layout>
-//      </Layout>
-//    );
-//}
-//export default App;
-//
+
+import { Table, Pagination } from 'antd';
 import { useState, useEffect } from 'react';
 import React from 'react';
 import { getAllStudents } from "./client";
@@ -136,8 +77,8 @@ function App() {
       columns={columns}
        bordered
            title={() => 'Students'}
-           pagination={{ pageSize: 50 }} scroll={{ y: 240 }}/>;
-
+           pagination={{ pageSize: 50 }} scroll={{ y: 240 }}
+           />;
       }
 
     return <Layout style={{ minHeight: '100vh' }}>
