@@ -1,30 +1,49 @@
 
-import { Table, Pagination } from 'antd';
+import { Table, pagination } from 'antd';
 import { useState, useEffect } from 'react';
 import React from 'react';
 import { getAllStudents } from "./client";
-import { Layout, Menu, Breadcrumb, Table, Spin, Empty } from 'antd';
+import { Layout, Menu, Breadcrumb, Spin, Empty,
+         Button, Badge, Tag, Avatar } from 'antd';
 import {
     DesktopOutlined,
     PieChartOutlined,
     FileOutlined,
     TeamOutlined,
     UserOutlined,
-    LoadingOutlined
+    LoadingOutlined,
+    PlusOutlined
 } from '@ant-design/icons';
-//import type { ColumnsType } from 'antd/es/table';
+import type { ColumnsType } from 'antd/es/table';
 
 import './App.css';
+import StudentDrawerForm from "./StudentDrawerForm";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+const TheAvatar = ({name}) => {
+      let trim = name.trim();
+      if (trim.length ===0) {
+         return <Avatar icon = {<UserOutlined/>}/>
+         }
+      const split = trim.split(" ");
+      if(split.length === 1) {
+         return <Avatar>
+         {name.charAt(0)}
+         </Avatar>
+         }
+      return <Avatar>
+      {`${split[0].charAt(0)}${split[split.length - 1].charAt(0)}`}
+      </Avatar>
+      }
 
 
 function App() {
     const [students, setStudents] = useState([]);
     const [collapsed, setCollapsed] = useState(false);
     const [fetching, setFetching] = useState(true);
+    const [showDrawer, setShowDrawer] = useState(false);
 
     const fetchStudents = () =>
         getAllStudents()
@@ -41,6 +60,13 @@ function App() {
     }, []);
 
      const columns = [
+          {
+            title: '',
+            dataIndex: 'avatar',
+            key: 'avatar',
+            render: (text, student) =>
+                  <TheAvatar name = {student.name}/>
+          },
           {
             title: 'Id',
             dataIndex: 'id',
@@ -73,12 +99,36 @@ function App() {
      return  <Empty />;
     }
 
-     return <Table dataSource={students}
-      columns={columns}
-       bordered
-           title={() => 'Students'}
-           pagination={{ pageSize: 50 }} scroll={{ y: 240 }}
-           />;
+     return <>
+     <StudentDrawerForm
+             setShowDrawer = {setShowDrawer}
+             showDrawer = {showDrawer}
+             fetchStudents = {fetchStudents}
+
+             />
+       <Table
+             dataSource={students}
+             columns={columns}
+             bordered
+             title={() =>
+             <>
+
+             <Tag>Number of Students</Tag>
+             <Badge count={students.length} className="site-badge-count-4"/>
+             <br></br>
+             <br></br>
+             <Button
+                    onClick = { () => setShowDrawer(!showDrawer)}
+                    type="primary" icon={<PlusOutlined />} size='small'>
+                    Add New Student
+             </Button>
+             </>
+         }
+
+             pagination={{ pageSize: 10 }}
+             scroll={{ y: 400 }}
+         />;
+         </>
       }
 
     return <Layout style={{ minHeight: '100vh' }}>
